@@ -1,2 +1,8 @@
-# auto-cpp-compiler
-You need to have g++ installed in your windows or Linus (Some OS have already installed like Ubuntu)
+# Auto CPP Compiler
+## Version : 1.0.0
+
+Made specially for Ubuntu for personal purpose, to avoid repetitive task of compiling file with g++ everytime.
+
+Currenlty Needs:
+- G++
+- Vim/Gedit
