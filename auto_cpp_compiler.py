@@ -4,6 +4,10 @@ import os
 import argparse
 import operations
 
+file_opr = operations.file()
+editor_opr = operations.editor()
+template_opr = operations.template()
+
 LOGO = '''\
     _         _           ____ ____  ____     ____                      _ _           
    / \  _   _| |_ ___    / ___|  _ \|  _ \   / ___|___  _ __ ___  _ __ (_) | ___ _ __ 
@@ -25,6 +29,7 @@ Example:
     > acc --ce vim
         
 For any issue contact me at bipulharsh123@gmail.com''')
+parser.add_argument('-o', action='store_const', const=True, default=False, dest='override_file', help="Override if file exists with template file.")
 parser.add_argument('file', type=str, default='', help="to create/open file.",nargs='?')
 parser.add_argument('--ct', action='store_const', const=True, default=False, dest='update_template', help="Change file template.")
 parser.add_argument('--st', action='store_const', const=True, default=False, dest='show_template', help="Show file template.")
@@ -36,28 +41,36 @@ parser.add_argument('--uninstall', action='store_const', const=True, default=Fal
 args = parser.parse_args()
 
 FILE = args.file.replace(' ', '_')
-UPDATE_EDITOR = args.ce
-UPDATE_TEMPLATE = args.update_template
+OVERRIDE_FILE = args.override_file
+CHANGE_EDITOR = bool(args.ce) #Empty string makes false
+EDITOR = args.ce
+CHANGE_TEMPLATE = args.update_template
 SHOW_VERSION = args.version
 DO_UNINSTALL = args.uninstall
 SHOW_EDITOR = args.show_editor
 SHOW_TEMPLATE = args.show_template
 
 # Check if the user didnt put anything
-assert bool(FILE or UPDATE_EDITOR or DO_UNINSTALL or UPDATE_TEMPLATE or SHOW_VERSION or SHOW_TEMPLATE or SHOW_EDITOR),"Please provide a file name"
+is_settings_related = bool(CHANGE_EDITOR or DO_UNINSTALL or CHANGE_TEMPLATE or SHOW_VERSION or SHOW_TEMPLATE or SHOW_EDITOR)
+assert bool(FILE or is_settings_related),"Please provide a file name"
 
-if SHOW_VERSION:
-    print(LOGO+'Version : 1.0.0')
+# All Query Task
+
+if is_settings_related:
+    print(LOGO+"--------------------------------------------------------------------------------------")
+    if SHOW_VERSION:
+        print('Version : 1.0.0')
+    if SHOW_EDITOR:
+        editor_name, editor_location = editor_opr.get_editor()
+        print("Currently Selected Editor\n"+editor_name+' : '+editor_location)
+    if CHANGE_EDITOR:
+        editor_opr.set_editor(EDITOR)
+    if SHOW_TEMPLATE:
+        print('Template\n\n'+template_opr.get_template())
+    if CHANGE_TEMPLATE:
+        template_opr.set_template()
+    
     exit(0)
 
-# File extension check
-assert '.cpp' in FILE or '.CPP' in FILE,'File Extension Problem'
-
-PWD = os.popen('pwd').read()[:-1]
-FILE = PWD+'/'+FILE
-print(FILE)
-
-file_opr = operations.file()
-file_opr.create_file(FILE)
-
-print(os.path.exists(FILE))
+# File Operations
+file_opr.create_file(FILE, OVERRIDE_FILE)

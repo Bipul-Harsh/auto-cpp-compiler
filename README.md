@@ -5,4 +5,4 @@ Made specially for Ubuntu for personal purpose, to avoid repetitive task of comp
 
 Currenlty Needs:
 - G++
-- Vim/Gedit
+- Vim/Nano/Gedit
