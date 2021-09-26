@@ -3,24 +3,8 @@ import os
 SYS_USER = os.popen('whoami').read()[:-1]
 # APP_PATH = f'/home/{SYS_USER}/.acc' # actual path
 APP_PATH = '/tmp/ramdisk/auto-cpp-compiler'
+COMPILER = 'g++'
 
-class file:
-    '''
-    File Related Operations
-    '''
-    def __init__(self):
-        self.pwd = os.popen('pwd').read()[:-1]
-    
-    def check_file(self):
-        return '.cpp' in self.file_path or '.CPP' in self.file_path
-
-    def create_file(self, file, override):
-        self.file_path = self.pwd+'/'+file
-        self.override = override
-        assert self.check_file(),'File Extension Problem'
-        if not os.path.exists(self.file_path) or override:
-            os.system(f'cp {APP_PATH}/template.cpp {self.file_path}')
-    
 class editor:
     '''
     Text Editor Related Operations
@@ -33,7 +17,7 @@ class editor:
         except ValueError:
             print("No editor info found, putting default editor.")
             try:
-               self.set_editor('nano')
+                self.set_editor('nano')
             except:
                 print("Default editor nano isn't installed in your system. Please install it and try again :)")
                 exit(1)
@@ -68,9 +52,13 @@ class editor:
             editor.find_editor() : to check if editor exists  
         '''
         path = self.find_editor(editor_name)
-        with open(self.editor_setting_file, 'w') as f:
-            f.write(f'{editor_name} {path}')
-        print(f"Changed Editor Info\n{editor_name} : {path}")
+        try:
+            with open(self.editor_setting_file, 'w') as f:
+                f.write(f'{editor_name} {path}')
+            print(f"Changed Editor Info\n{editor_name} : {path}")
+        except:
+            print("You might have not installed the application. Please install and try again")
+            exit(1)
 
     def get_editor(self):
         with open(self.editor_setting_file, 'r') as f:
@@ -87,5 +75,32 @@ class template(editor):
             file_content = f.read()
         return file_content
     
-    def set_template():
-        pass
+    def set_template(self):
+        os.system(f'{self.editor_path} {APP_PATH}/template.cpp')
+        print("Template Changed successfully")
+        print('Updated Template\n\n'+self.get_template())
+
+class file(editor):
+    '''
+    File Related Operations
+    '''
+    def __init__(self):
+        self.pwd = os.popen('pwd').read()[:-1]
+        editor.__init__(self)
+        self.compiler = os.popen('which g++').read()[:-1]
+        assert self.compiler,"g++ compiler doesnt exist in you system. Please first install it and then try again."
+    
+    def check_file(self):
+        return '.cpp' in self.file_path or '.CPP' in self.file_path
+
+    def create_file(self, file, override):
+        self.file_path = self.pwd+'/'+file
+        self.override = override
+        assert self.check_file(),'File Extension Problem'
+        if not os.path.exists(self.file_path) or override:
+            os.system(f'cp {APP_PATH}/template.cpp {self.file_path}')
+    
+    def compile_file(self):
+        assert os.popen(f'which {COMPILER}').read()[:-1],f'{COMPILER} is not installed in your system. Please install it and try again'
+        output = os.popen(f'{COMPILER} {self.file_path}').read()[:-1]
+        print('ff',output)

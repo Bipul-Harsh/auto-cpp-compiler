@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-import os
 import argparse
 import operations
 
@@ -74,3 +73,4 @@ if is_settings_related:
 
 # File Operations
 file_opr.create_file(FILE, OVERRIDE_FILE)
+file_opr.compile_file()
