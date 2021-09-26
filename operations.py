@@ -61,6 +61,12 @@ class editor:
             exit(1)
 
     def get_editor(self):
+        '''
+        Gives editor name and file path
+
+        Returns:
+            (editor_name, editor_path)
+        '''
         with open(self.editor_setting_file, 'r') as f:
             self.editor_name, self.editor_path = f.read().strip().split(' ')
             return (self.editor_name, self.editor_path)
@@ -71,11 +77,17 @@ class template(editor):
         editor.__init__(self)
     
     def get_template(self):
+        '''
+        Return template.cpp file content as a string.
+        '''
         with open(self.template_file, 'r') as f:
             file_content = f.read()
         return file_content
     
     def set_template(self):
+        '''
+        Opens the template.cpp file in editor to make some changes in it.
+        '''
         os.system(f'{self.editor_path} {APP_PATH}/template.cpp')
         print("Template Changed successfully")
         print('Updated Template\n\n'+self.get_template())
@@ -87,20 +99,41 @@ class file(editor):
     def __init__(self):
         self.pwd = os.popen('pwd').read()[:-1]
         editor.__init__(self)
-        self.compiler = os.popen('which g++').read()[:-1]
-        assert self.compiler,"g++ compiler doesnt exist in you system. Please first install it and then try again."
     
     def check_file(self):
+        '''
+        Check file for filename error.
+        '''
         return '.cpp' in self.file_path or '.CPP' in self.file_path
 
     def create_file(self, file, override):
+        '''
+        Create file in the present directory.
+        '''
         self.file_path = self.pwd+'/'+file
         self.override = override
         assert self.check_file(),'File Extension Problem'
         if not os.path.exists(self.file_path) or override:
             os.system(f'cp {APP_PATH}/template.cpp {self.file_path}')
     
-    def compile_file(self):
+    def compile_file(self, output_file):
+        '''
+        Checks compiler and compiles the cpp file and generate ouput file in present directory.
+        '''
+        self.output_file = output_file
         assert os.popen(f'which {COMPILER}').read()[:-1],f'{COMPILER} is not installed in your system. Please install it and try again'
-        output = os.popen(f'{COMPILER} {self.file_path}').read()[:-1]
-        print('ff',output)
+        os.system(f'{COMPILER} {self.file_path} -o {output_file}')
+    
+    def open_file(self):
+        '''
+        Opens the file in selected editor.
+        '''
+        os.system(f'{self.editor_path} {self.file_path}')
+    
+    def execute_output(self):
+        '''
+        Executes the output .out file.
+        '''
+        file_path = self.file_path.split('/')
+        execute_command = '/'.join(file_path[:-1])+'/./'+self.output_file
+        os.system(f'{execute_command}')
