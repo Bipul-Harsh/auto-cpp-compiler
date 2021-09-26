@@ -1,1 +1,1 @@
-vim /usr/bin/vim
+nano /usr/bin/nano
