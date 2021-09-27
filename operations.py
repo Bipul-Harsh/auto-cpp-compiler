@@ -1,17 +1,31 @@
 import os
+from shutil import which
+import getpass
 
-SYS_USER = os.popen('whoami').read()[:-1]
-# APP_PATH = f'/home/{SYS_USER}/.acc' # actual path
-APP_PATH = '/tmp/ramdisk/auto-cpp-compiler'
+# APP_PATH = f'/home/{SYS_USER}/.acc' # actual path to put in .app_path file
+APP_PATH = '/tmp/ramdisk/.acc'
+SYS_USER = getpass.getuser()
 COMPILER = 'g++'
 
-class editor:
+
+class system_settings:
+    def __init__(self, installation_dir = ''):
+        if(installation_dir):
+            self.APP_PATH = installation_dir
+        else:
+            self.get_app_path()
+    def get_app_path(self):
+        with open(f'{self.APP_PATH}/.app_path', 'r') as f:
+            self.APP_PATH = f.read()[:-1]
+        print('app path',self.APP_PATH)
+
+class editor(system_settings):
     '''
     Text Editor Related Operations
     '''
-    def __init__(self):
-        # self.editor_file_path = f'/home/{self.user_name}/.acc/editor.txt'
-        self.editor_setting_file = APP_PATH+'/editor.txt'
+    def __init__(self, installation_dir = ''):
+        system_settings.__init__(installation_dir)
+        self.editor_setting_file = self.APP_PATH+'/editor.txt'
         try:
             self.get_editor()
         except ValueError:
@@ -33,7 +47,7 @@ class editor:
         Args:
             editor : editor name
         '''
-        path = os.popen(f'which {editor}').read()[:-1]
+        path = which(editor)
         assert path,f"{editor} editor doesnt exist in you system. Please first install it and then try again."
         return path
 
@@ -72,9 +86,9 @@ class editor:
             return (self.editor_name, self.editor_path)
 
 class template(editor):
-    def __init__(self):
-        self.template_file = APP_PATH+'/template.cpp'
-        editor.__init__(self)
+    def __init__(self, installation_dir=''):
+        self.template_file = self.APP_PATH+'/template.cpp'
+        editor.__init__(self, installation_dir)
     
     def get_template(self):
         '''
@@ -88,17 +102,17 @@ class template(editor):
         '''
         Opens the template.cpp file in editor to make some changes in it.
         '''
-        os.system(f'{self.editor_path} {APP_PATH}/template.cpp')
+        os.system(f'{self.editor_path} {self.APP_PATH}/template.cpp')
         print("Template Changed successfully")
         print('Updated Template\n\n'+self.get_template())
 
-class file(editor):
+class file(template):
     '''
     File Related Operations
     '''
     def __init__(self):
-        self.pwd = os.popen('pwd').read()[:-1]
-        editor.__init__(self)
+        self.pwd = os.getcwd()
+        template.__init__(self)
     
     def check_file(self):
         '''
@@ -114,14 +128,15 @@ class file(editor):
         self.override = override
         assert self.check_file(),'File Extension Problem'
         if not os.path.exists(self.file_path) or override:
-            os.system(f'cp {APP_PATH}/template.cpp {self.file_path}')
+            with open(self.file_path, 'w') as f:
+                f.write(self.get_template())
     
     def compile_file(self, output_file):
         '''
         Checks compiler and compiles the cpp file and generate ouput file in present directory.
         '''
         self.output_file = output_file
-        assert os.popen(f'which {COMPILER}').read()[:-1],f'{COMPILER} is not installed in your system. Please install it and try again'
+        assert which(COMPILER),f'{COMPILER} is not installed in your system. Please install it and try again'
         os.system(f'{COMPILER} {self.file_path} -o {output_file}')
     
     def open_file(self):

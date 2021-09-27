@@ -2,11 +2,16 @@
 
 import argparse
 import os
+import shutil
 
 import operations
-file_opr = operations.file()
-editor_opr = operations.editor()
-template_opr = operations.template()
+try:
+    file_opr = operations.file()
+    editor_opr = operations.editor()
+    template_opr = operations.template()
+    system_settings = operations.system_settings()
+except FileNotFoundError:
+    print("File is not found. Please install the program first.")
 
 LOGO = '''\
     _         _           ____ ____  ____     ____                      _ _           
@@ -27,7 +32,7 @@ Example:
     > acc --ct
     > acc --ce vim
         
-For any issue contact me at bipulharsh123@gmail.com''')
+For any issue visit:\nhttps://github.com/Bipul-Harsh/auto-cpp-compiler/issues''')
 parser.add_argument('-o', action='store_const', const=True, default=False, dest='override_file', help="Override if file exists with template file.")
 parser.add_argument('file', type=str, default='', help="to create/open file.",nargs='?')
 parser.add_argument('--ct', action='store_const', const=True, default=False, dest='update_template', help="Change file template.")
@@ -36,6 +41,7 @@ parser.add_argument('--ce', type=str, help="Change text editor of your choice (v
 parser.add_argument('--se', action='store_const', const=True, default=False, dest='show_editor', help="Show selected text editor.")
 parser.add_argument('--version', action='store_const', const=True, default=False, dest='version', help="Show current version.")
 parser.add_argument('-co', type=str, default="a.out", help="Change output file name on compiling file.")
+parser.add_argument('--reinstall', action='store_const', const=True, default=False, dest='reinstall', help="To reinstall the program. Be catious as all custom settings will be lost.")
 parser.add_argument('--uninstall', action='store_const', const=True, default=False, dest='uninstall', help="To uninstall %(prog)s program :(")
 
 args = parser.parse_args()
@@ -49,6 +55,7 @@ SHOW_VERSION = args.version
 SHOW_EDITOR = args.show_editor
 SHOW_TEMPLATE = args.show_template
 OUTPUT_FILE = args.co
+DO_REINSTALL = args.reinstall
 DO_UNINSTALL = args.uninstall
 
 # Check if the user didnt put anything
@@ -70,7 +77,16 @@ if is_settings_related:
         print('Template\n\n'+template_opr.get_template())
     if CHANGE_TEMPLATE:
         template_opr.set_template()
-    
+    if DO_UNINSTALL:
+        confirm = ''
+        while(confirm not in ['y','n']):
+            confirm = input("Are you sure to uninstall this software (y/n): ").strip().lower()
+            if confirm=='y':
+                assert os.path.isdir(system_settings.APP_PATH),"Resource cannot be found.\nYou might haven't installed this software yet."
+                shutil.rmtree(system_settings.APP_PATH)
+                print("\nProgram uninstalled successfully.\n\nPlease let me know for any issues you have faced at:\nhttps://github.com/Bipul-Harsh/auto-cpp-compiler/issues")
+            elif confirm=='n':
+                exit(0)
     exit(0)
 
 # File Operations
