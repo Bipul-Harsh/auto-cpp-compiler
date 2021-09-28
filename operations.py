@@ -1,31 +1,26 @@
 import os
 from shutil import which
 import getpass
+import sys
 
-# APP_PATH = f'/home/{SYS_USER}/.acc' # actual path to put in .app_path file
-APP_PATH = '/tmp/ramdisk/.acc'
 SYS_USER = getpass.getuser()
 COMPILER = 'g++'
 
-
 class system_settings:
-    def __init__(self, installation_dir = ''):
-        if(installation_dir):
-            self.APP_PATH = installation_dir
-        else:
-            self.get_app_path()
-    def get_app_path(self):
-        with open(f'{self.APP_PATH}/.app_path', 'r') as f:
-            self.APP_PATH = f.read()[:-1]
-        print('app path',self.APP_PATH)
+    def __init__(self):
+        curr_dir = os.getcwd().split('/')
+        argument = sys.argv[0].split('/')[:-1]
+        if len(argument) > 0 and argument[-1] == '.':
+            argument = argument[:-1]
+        self.APP_PATH = '/'.join(curr_dir+argument)
 
 class editor(system_settings):
     '''
     Text Editor Related Operations
     '''
-    def __init__(self, installation_dir = ''):
-        system_settings.__init__(installation_dir)
-        self.editor_setting_file = self.APP_PATH+'/editor.txt'
+    def __init__(self):
+        system_settings.__init__(self)
+        self.editor_setting_file = self.APP_PATH+'/.editor'
         try:
             self.get_editor()
         except ValueError:
@@ -33,7 +28,7 @@ class editor(system_settings):
             try:
                 self.set_editor('nano')
             except:
-                print("Default editor nano isn't installed in your system. Please install it and try again :)")
+                print("Default editor nano isn't installed in your system. \nPlease install  and try again :)")
                 exit(1)
             self.get_editor()
 
@@ -86,9 +81,9 @@ class editor(system_settings):
             return (self.editor_name, self.editor_path)
 
 class template(editor):
-    def __init__(self, installation_dir=''):
+    def __init__(self):
+        editor.__init__(self)
         self.template_file = self.APP_PATH+'/template.cpp'
-        editor.__init__(self, installation_dir)
     
     def get_template(self):
         '''
