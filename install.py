@@ -17,20 +17,15 @@ print(INSTALLATION_DIR)
 editor_opr = operations.editor(INSTALLATION_DIR)
 template_opr = operations.template(INSTALLATION_DIR)
 
-USER = getpass.getuser()
-
-APP_DIR_NAME = '.acc'
-# LINUX_APP_PATH = f'/home/{USER}'
-LINUX_APP_PATH = '/tmp/ramdisk/'
-WINDOWS_APP_PATH = ''
-MAC_APP_PATH = ''
+USER_NAME = getpass.getuser()
+print(USER_NAME)
 
 PLATFORM = platform.system()
 
 class installing_process():
     def __init__(self):
         self.get_app_path()
-    
+    '''
     def get_app_path(self):
         if PLATFORM == 'Linux':
             self.app_path = f'{LINUX_APP_PATH}/{APP_DIR_NAME}'
@@ -41,7 +36,7 @@ class installing_process():
         else:
             print('This software doesnt support this system yet :(\nPlease let us know your system to extend our application compatibility with it.')
             exit(1)
-
+    '''
     def create_app_dir(self):
         assert not os.path.isdir(self.app_path),"Program already installed."
         os.mkdir(self.app_path)

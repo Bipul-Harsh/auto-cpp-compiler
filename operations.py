@@ -7,19 +7,26 @@ SYS_USER = getpass.getuser()
 COMPILER = 'g++'
 
 class system_settings:
-    def __init__(self):
-        curr_dir = os.getcwd().split('/')
-        argument = sys.argv[0].split('/')[:-1]
-        if len(argument) > 0 and argument[-1] == '.':
-            argument = argument[:-1]
-        self.APP_PATH = '/'.join(curr_dir+argument)
+    def __init__(self, installation_dir=''):
+        if installation_dir:
+            self.APP_PATH = installation_dir
+        else:
+            curr_dir = os.getcwd()
+            argument = sys.argv[0].split('/')[:-1]
+            if len(argument) > 0 and argument[-1] == '.':
+                argument = argument[:-1]
+            if argument[0] == '':
+                self.APP_PATH = '/'.join(argument)
+            else:
+                self.APP_PATH = curr_dir+'/'+'/'.join(argument)
+            print(self.APP_PATH)
 
 class editor(system_settings):
     '''
     Text Editor Related Operations
     '''
-    def __init__(self):
-        system_settings.__init__(self)
+    def __init__(self, installation_dir=''):
+        system_settings.__init__(self, installation_dir)
         self.editor_setting_file = self.APP_PATH+'/.editor'
         try:
             self.get_editor()
@@ -81,8 +88,8 @@ class editor(system_settings):
             return (self.editor_name, self.editor_path)
 
 class template(editor):
-    def __init__(self):
-        editor.__init__(self)
+    def __init__(self, installation_dir = ''):
+        editor.__init__(self, installation_dir)
         self.template_file = self.APP_PATH+'/template.cpp'
     
     def get_template(self):
