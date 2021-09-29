@@ -1,8 +1,10 @@
 #!/usr/bin/python3
+#!python3
+#!/usr/bin/env
 
 import argparse
 import os
-import shutil
+import platform
 
 import operations
 try:
@@ -67,14 +69,16 @@ assert bool(FILE or is_settings_related),"Please provide a file name"
 if is_settings_related:
     print(LOGO+'Does repetitve compiling task of .cpp file for you :)\n'+"--------------------------------------------------------------------------------------")
     if SHOW_VERSION:
-        print('Version : 1.0.0')
+        print('\nVersion : 1.0.0')
     if SHOW_EDITOR:
         editor_name, editor_location = editor_opr.get_editor()
-        print("Currently Selected Editor\n"+editor_name+' : '+editor_location)
+        print("\nCurrently Selected Editor\n"+editor_name+' : '+editor_location)
     if CHANGE_EDITOR:
         editor_opr.set_editor(EDITOR)
     if SHOW_TEMPLATE:
-        print('Template\n\n'+template_opr.get_template())
+        print('\nTemplate\n------------------------------------------------------------------------------------\n'
+            + template_opr.get_template()
+            + '\n----------------------------------------------------------------')
     if CHANGE_TEMPLATE:
         template_opr.set_template()
     if DO_UNINSTALL:
@@ -82,9 +86,7 @@ if is_settings_related:
         while(confirm not in ['y','n']):
             confirm = input("Are you sure to uninstall this software (y/n): ").strip().lower()
             if confirm=='y':
-                assert os.path.isdir(system_settings.APP_PATH),"Resource cannot be found.\nYou might haven't installed this software yet."
-                shutil.rmtree(system_settings.APP_PATH)
-                print("\nProgram uninstalled successfully.\n\nPlease let me know for any issues you have faced at:\nhttps://github.com/Bipul-Harsh/auto-cpp-compiler/issues")
+                system_settings.uninstall()
             elif confirm=='n':
                 exit(0)
     exit(0)
@@ -93,7 +95,10 @@ if is_settings_related:
 file_opr.create_file(FILE, OVERRIDE_FILE)
 in_loop = True
 while in_loop:
-    os.system('clear')
+    if platform.system() == 'Windows':
+        os.system('cls')
+    else:
+        os.system('clear')
     file_opr.open_file()
     file_opr.compile_file(OUTPUT_FILE)
     print('Ouput\n------------------------------------------------------------------------------------')

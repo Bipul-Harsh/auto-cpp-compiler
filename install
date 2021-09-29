@@ -1,9 +1,12 @@
 #!/usr/bin/python3
+#!python3
+#!/usr/bin/env
 
 import platform
 import os
 import getpass
 import sys
+import shutil
 
 import operations
 
@@ -12,33 +15,39 @@ argument = sys.argv[0].split('/')[:-1]
 if len(argument) > 0 and argument[-1] == '.':
     argument = argument[:-1]
 INSTALLATION_DIR = '/'.join(curr_dir+argument)
-print(INSTALLATION_DIR)
 
 editor_opr = operations.editor(INSTALLATION_DIR)
 template_opr = operations.template(INSTALLATION_DIR)
 
 USER_NAME = getpass.getuser()
 print(USER_NAME)
-
+LINUX_APP_PATH = f"/home/{USER_NAME}"
+APP_DIR_NAME = '.acc'
 PLATFORM = platform.system()
-
+ISSUES_LINK = 'https://github.com/Bipul-Harsh/auto-cpp-compiler/issues'
 class installing_process():
     def __init__(self):
         self.get_app_path()
-    '''
     def get_app_path(self):
         if PLATFORM == 'Linux':
             self.app_path = f'{LINUX_APP_PATH}/{APP_DIR_NAME}'
         elif PLATFORM == 'Mac':
-            self.app_path = f'{MAC_APP_PATH}/{APP_DIR_NAME}'
+            # self.app_path = f'{MAC_APP_PATH}/{APP_DIR_NAME}'
+            print(f"Currently this application cannot be installed in your system.\nBut dont worry it will be supported soon on your request on:\n{ISSUES_LINK}")
         elif PLATFORM == 'Windows':
-            self.app_path = f'{WINDOWS_APP_PATH}/{APP_DIR_NAME}'
+            # self.app_path = f'{WINDOWS_APP_PATH}/{APP_DIR_NAME}'
+            pass
         else:
-            print('This software doesnt support this system yet :(\nPlease let us know your system to extend our application compatibility with it.')
+            print(f'This software doesnt support this system yet :(\nPlease let us know your system to extend our application compatibility with it.\n\nYou can tell this issue at:\n{ISSUES_LINK}')
             exit(1)
-    '''
+        print(self.app_path)
+
     def create_app_dir(self):
-        assert not os.path.isdir(self.app_path),"Program already installed."
+        '''
+        Makes a forced installation if already installed. All previous setitings will be lost!!
+        '''
+        if not os.path.isdir(self.app_path):
+            shutil.rmtree(self.app_path)
         os.mkdir(self.app_path)
     
     def put_template_file(self):
@@ -48,9 +57,21 @@ class installing_process():
             # print(template_opr.get_template())
             opr = input('\n--------------------------------\nSave above default Template [u to_update] [c confirmed] : ').strip().lower()
     
+    def create_symlink(self):
+        # For linux only
+        symlink_path = "/usr/local/bin/acc"
+        file_path = INSTALLATION_DIR+'/acc'
+        print(symlink_path, file_path)
+        if os.path.exists(symlink_path):
+            print('syslink exists')
+            os.system(f'sudo rm {symlink_path}')
+        os.system(f'sudo ln -s {file_path} {symlink_path}')
+        
+    
     def do_installation(self):
         print(f"System : {PLATFORM} {platform.release()}")
         # self.create_app_dir()
+        self.create_symlink()
 
 if __name__ == '__main__':
     installation = installing_process()

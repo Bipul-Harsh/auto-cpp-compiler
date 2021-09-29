@@ -1,10 +1,12 @@
 import os
-from shutil import which
+import shutil
 import getpass
 import sys
+import platform
 
 SYS_USER = getpass.getuser()
 COMPILER = 'g++'
+ISSUES_LINK = 'https://github.com/Bipul-Harsh/auto-cpp-compiler/issues'
 
 class system_settings:
     def __init__(self, installation_dir=''):
@@ -19,7 +21,15 @@ class system_settings:
                 self.APP_PATH = '/'.join(argument)
             else:
                 self.APP_PATH = curr_dir+'/'+'/'.join(argument)
-            print(self.APP_PATH)
+    
+    def uninstall(self):
+        assert os.path.isdir(self.APP_PATH),"Resource cannot be found.\nYou might haven't installed this software yet."
+        # shutil.rmtree(self.APP_PATH)
+        if platform.system() == "Linux":
+            symlink_path = "/usr/local/bin/acc"
+            if os.path.exists(symlink_path):
+                os.system(f"sudo rm {symlink_path}")
+        print(f"\nProgram uninstalled successfully.\n\nPlease let me know for any issues you have faced at:\n{ISSUES_LINK}")
 
 class editor(system_settings):
     '''
@@ -49,7 +59,7 @@ class editor(system_settings):
         Args:
             editor : editor name
         '''
-        path = which(editor)
+        path = shutil.which(editor)
         assert path,f"{editor} editor doesnt exist in you system. Please first install it and then try again."
         return path
 
@@ -138,7 +148,7 @@ class file(template):
         Checks compiler and compiles the cpp file and generate ouput file in present directory.
         '''
         self.output_file = output_file
-        assert which(COMPILER),f'{COMPILER} is not installed in your system. Please install it and try again'
+        assert shutil.which(COMPILER),f'{COMPILER} is not installed in your system. Please install it and try again'
         os.system(f'{COMPILER} {self.file_path} -o {output_file}')
     
     def open_file(self):

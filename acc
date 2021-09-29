@@ -1,0 +1,21 @@
+#!/usr/bin/python3
+#!python3
+#!/usr/bin/env
+
+import sys
+import os
+import platform
+import getpass
+
+PLATFORM = platform.system()
+USER_NAME = getpass.getuser()
+
+ARGS = ' '.join(sys.argv[1:])
+
+if PLATFORM == 'Windows':
+    pass
+
+elif PLATFORM == "Linux":
+    # APP_PATH = f'/home/{USER_NAME}/.acc'
+    APP_PATH = '/tmp/ramdisk/auto-cpp-compiler'
+    os.system(f'{APP_PATH}/./main.py {ARGS}')
