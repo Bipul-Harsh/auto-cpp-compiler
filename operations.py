@@ -24,7 +24,7 @@ class system_settings:
     
     def uninstall(self):
         assert os.path.isdir(self.APP_PATH),"Resource cannot be found.\nYou might haven't installed this software yet."
-        # shutil.rmtree(self.APP_PATH)
+        shutil.rmtree(self.APP_PATH)
         if platform.system() == "Linux":
             symlink_path = "/usr/local/bin/acc"
             if os.path.exists(symlink_path):
@@ -41,13 +41,20 @@ class editor(system_settings):
         try:
             self.get_editor()
         except ValueError:
-            print("No editor info found, putting default editor.")
-            try:
-                self.set_editor('nano')
-            except:
-                print("Default editor nano isn't installed in your system. \nPlease install  and try again :)")
-                exit(1)
-            self.get_editor()
+            #No editor info found, putting default editor.
+            editors = ['nano','vim','neovim','emacs','gedit']
+            got_any = False
+            for editor in editors:
+                try:
+                    self.set_editor(editor)
+                    self.get_editor()
+                    got_any = True
+                    break
+                except:
+                    pass
+            if not got_any:
+                print(f"You system doesnt have any of these text editors:\n"+'\n'.join(editors)+'\nPlease install any of them to get started.')
+                exit(0)
 
     def find_editor(self, editor):
         '''
@@ -95,7 +102,7 @@ class editor(system_settings):
         '''
         with open(self.editor_setting_file, 'r') as f:
             self.editor_name, self.editor_path = f.read().strip().split(' ')
-            return (self.editor_name, self.editor_path)
+        return (self.editor_name, self.editor_path)
 
 class template(editor):
     def __init__(self, installation_dir = ''):
