@@ -4,6 +4,7 @@ import os
 import platform
 
 import operations
+# Initialising operation module
 try:
     file_opr = operations.file()
     editor_opr = operations.editor()
@@ -11,6 +12,8 @@ try:
     system_settings = operations.system_settings()
 except FileNotFoundError:
     print("File is not found. Please install the program first.")
+
+VERSION = "1.0.0"
 
 LOGO = '''\
     _         _           ____ ____  ____     ____                      _ _           
@@ -60,11 +63,10 @@ is_settings_related = bool(CHANGE_EDITOR or DO_UNINSTALL or CHANGE_TEMPLATE or S
 assert bool(FILE or is_settings_related),"Please provide a file name"
 
 # All Query Task
-
 if is_settings_related:
     print(LOGO+'Does repetitve compiling task of .cpp file for you :)\n'+"--------------------------------------------------------------------------------------")
     if SHOW_VERSION:
-        print('\nVersion : 1.0.0')
+        print(f'\nVersion : {VERSION}')
     if SHOW_EDITOR:
         editor_name, editor_location = editor_opr.get_editor()
         print("\nCurrently Selected Editor\n"+editor_name+' : '+editor_location)

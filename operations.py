@@ -12,19 +12,26 @@ PLATFORM = platform.system()
 class system_settings:
     def __init__(self, installation_dir=''):
         self.get_path_progressor()
-
-        if installation_dir:
-            self.APP_PATH = installation_dir
+        curr_dir = os.getcwd()
+        argument = sys.argv[0].strip().split(f'{self.pp}')[:-1]
+        if len(argument) > 0 and argument[-1] == '.':
+            # If users try to crete the file in installation dir
+            self.APP_PATH = curr_dir
+        elif self.all_files_exists(f'{self.pp}'.join(argument)):
+            # When user calls it from root. Then we can simply put the argument as app dir
+            self.APP_PATH = f'{self.pp}'.join(argument)
         else:
-            curr_dir = os.getcwd()
-            argument = sys.argv[0].strip().split(f'{self.pp}')[:-1]
-            if len(argument) > 0 and argument[-1] == '.':
-                argument = argument[:-1]
-            if argument[0] == '':
-                self.APP_PATH = '/'.join(argument)
-            else:
-                self.APP_PATH = curr_dir+f'{self.pp}'+f'{self.pp}'.join(argument)
+            # When user calls from a different dir and refernce it from there
+            self.APP_PATH = curr_dir+f'{self.pp}'+f'{self.pp}'.join(argument)
     
+    def all_files_exists(self, path):
+        required_files = ['install', 'main.py', 'oprations.py', 'template.cpp','acc','.editor']
+        for file in required_files:
+            if not os.path.exists(f'{path}{self.pp}{file}'):
+                return False
+        else:
+            return True
+
     def get_path_progressor(self):
         '''Windows has unfortunately different way to progress through directories
         \n`pp` stands for path progressor
@@ -54,7 +61,7 @@ class editor(system_settings):
             self.get_editor()
         except ValueError:
             #No editor info found, putting default editor.
-            editors = ['nano','vim','neovim','emacs','gedit']
+            editors = ['nano','vim','neovim','emacs','gedit','notepad']
             got_any = False
             for editor in editors:
                 try:
@@ -97,9 +104,10 @@ class editor(system_settings):
             editor.find_editor() : to check if editor exists  
         '''
         path = self.find_editor(editor_name)
+        print("path: ", path)
         try:
             with open(self.editor_setting_file, 'w') as f:
-                f.write(f'{editor_name} {path}')
+                f.write(f'{editor_name}|{path}')
             print(f"Changed Editor Info\n{editor_name} : {path}")
         except:
             print("You might have not installed the application. Please install and try again")
@@ -113,7 +121,7 @@ class editor(system_settings):
             (editor_name, editor_path)
         '''
         with open(self.editor_setting_file, 'r') as f:
-            self.editor_name, self.editor_path = f.read().strip().split(' ')
+            self.editor_name, self.editor_path = f.read().strip().split('|')
         return (self.editor_name, self.editor_path)
 
 class template(editor):
@@ -174,7 +182,7 @@ class file(template):
         '''
         Opens the file in selected editor.
         '''
-        os.system(f'{self.editor_path} {self.file_path}')
+        os.system(f'{self.editor_name} {self.file_path}')
     
     def execute_output(self):
         '''
