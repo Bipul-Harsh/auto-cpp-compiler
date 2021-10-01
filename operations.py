@@ -7,25 +7,37 @@ import platform
 SYS_USER = getpass.getuser()
 COMPILER = 'g++'
 ISSUES_LINK = 'https://github.com/Bipul-Harsh/auto-cpp-compiler/issues'
+PLATFORM = platform.system()
 
 class system_settings:
     def __init__(self, installation_dir=''):
+        self.get_path_progressor()
+
         if installation_dir:
             self.APP_PATH = installation_dir
         else:
             curr_dir = os.getcwd()
-            argument = sys.argv[0].split('/')[:-1]
+            argument = sys.argv[0].strip().split(f'{self.pp}')[:-1]
             if len(argument) > 0 and argument[-1] == '.':
                 argument = argument[:-1]
             if argument[0] == '':
                 self.APP_PATH = '/'.join(argument)
             else:
-                self.APP_PATH = curr_dir+'/'+'/'.join(argument)
+                self.APP_PATH = curr_dir+f'{self.pp}'+f'{self.pp}'.join(argument)
     
+    def get_path_progressor(self):
+        '''Windows has unfortunately different way to progress through directories
+        \n`pp` stands for path progressor
+        '''
+        if PLATFORM == "Windows":
+            self.pp = '\\'
+        else:
+            self.pp = '/'
+
     def uninstall(self):
         assert os.path.isdir(self.APP_PATH),"Resource cannot be found.\nYou might haven't installed this software yet."
         shutil.rmtree(self.APP_PATH)
-        if platform.system() == "Linux":
+        if PLATFORM == "Linux":
             symlink_path = "/usr/local/bin/acc"
             if os.path.exists(symlink_path):
                 os.system(f"sudo rm {symlink_path}")
@@ -37,7 +49,7 @@ class editor(system_settings):
     '''
     def __init__(self, installation_dir=''):
         system_settings.__init__(self, installation_dir)
-        self.editor_setting_file = self.APP_PATH+'/.editor'
+        self.editor_setting_file = self.APP_PATH+f'{self.pp}.editor'
         try:
             self.get_editor()
         except ValueError:
@@ -121,7 +133,7 @@ class template(editor):
         '''
         Opens the template.cpp file in editor to make some changes in it.
         '''
-        os.system(f'{self.editor_path} {self.APP_PATH}/template.cpp')
+        os.system(f'{self.editor_path} {self.APP_PATH}{self.pp}template.cpp')
         print("Template Changed successfully")
         print('Updated Template\n\n'+self.get_template())
 
@@ -143,7 +155,7 @@ class file(template):
         '''
         Create file in the present directory.
         '''
-        self.file_path = self.pwd+'/'+file
+        self.file_path = self.pwd+f'{self.pp}'+file
         self.override = override
         assert self.check_file(),'File Extension Problem'
         if not os.path.exists(self.file_path) or override:
@@ -168,6 +180,6 @@ class file(template):
         '''
         Executes the output .out file.
         '''
-        file_path = self.file_path.split('/')
-        execute_command = '/'.join(file_path[:-1])+'/./'+self.output_file
+        file_path = self.file_path.split(f'{self.pp}')
+        execute_command = f'{self.pp}'.join(file_path[:-1])+f'{self.pp}.{self.pp}'+self.output_file
         os.system(f'{execute_command}')

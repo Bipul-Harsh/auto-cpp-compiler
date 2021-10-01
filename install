@@ -1,42 +1,55 @@
-#!/usr/bin/python3
-#!python3
-#!/usr/bin/env
-
+#!python
 import platform
 import os
 import getpass
 import sys
 import shutil
 
-curr_dir = os.getcwd().split('/')
-argument = sys.argv[0].split('/')[:-1]
-if len(argument) > 0 and argument[-1] == '.':
-    argument = argument[:-1]
-INSTALLATION_DIR = '/'.join(curr_dir+argument)
-
 USER_NAME = getpass.getuser()
-print(USER_NAME)
 LINUX_APP_PATH = f"/home/{USER_NAME}"
+WINDOWS_APP_PATH = f"C:\\Users\\{USER_NAME}"
 APP_DIR_NAME = '.acc'
 PLATFORM = platform.system()
 ISSUES_LINK = 'https://github.com/Bipul-Harsh/auto-cpp-compiler/issues'
 
 class installing_process():
     def __init__(self):
+        self.get_path_progressor()
         self.get_app_path()
+        self.get_installation_dir()
     
+    def get_path_progressor(self):
+        '''Windows has unfortunately different way to progress through directories
+        \n`pp` stands for path progressor
+        '''
+        if PLATFORM == "Windows":
+            self.pp = '\\'
+        else:
+            self.pp = '/'
+
+    def get_installation_dir(self):
+        curr_dir = os.getcwd()
+        argument = sys.argv[0].split(f'{self.pp}')[:-1]
+        if len(argument) > 0 and argument[-1] == '.':
+            argument = argument[:-1]
+        if len(argument)==0:
+            self.INSTALLATION_DIR = curr_dir
+        else:
+            self.INSTALLATION_DIR = curr_dir+f'{self.pp}'+f'{self.pp}'.join(argument)
+
     def get_app_path(self):
         if PLATFORM == 'Linux':
-            self.app_path = f'{LINUX_APP_PATH}/{APP_DIR_NAME}'
+            self.app_path = f'{LINUX_APP_PATH}{self.pp}{APP_DIR_NAME}'
         elif PLATFORM == 'Mac':
-            # self.app_path = f'{MAC_APP_PATH}/{APP_DIR_NAME}'
+            # self.app_path = f'{MAC_APP_PATH}{self.pp}{APP_DIR_NAME}'
             print(f"Currently this application cannot be installed in your system.\nBut dont worry it will be supported soon on your request on:\n{ISSUES_LINK}")
+            exit(0)
         elif PLATFORM == 'Windows':
-            # self.app_path = f'{WINDOWS_APP_PATH}/{APP_DIR_NAME}'
-            print(f"Currently this application cannot be installed in your system.\nBut dont worry it will be supported soon on your request on:\n{ISSUES_LINK}")
+            self.app_path = f'{WINDOWS_APP_PATH}{self.pp}{APP_DIR_NAME}'
+            print('app_path', self.app_path)
         else:
             print(f'This software doesnt support this system yet :(\nPlease let us know your system to extend our application compatibility with it.\n\nYou can tell this issue at:\n{ISSUES_LINK}')
-            exit(1)
+            exit(0)
         print(self.app_path)
 
     def create_app_dir(self):
@@ -46,6 +59,8 @@ class installing_process():
         if os.path.isdir(self.app_path):
             shutil.rmtree(self.app_path)
         os.mkdir(self.app_path)
+        print(self.app_path)
+        print(os.path.isdir(self.app_path))
     
     def create_symlink(self):
         '''For linux only'''
@@ -62,7 +77,7 @@ class installing_process():
         Return given file content as a string.
         Will be used by `self.put_files()` to access file content in string
         '''
-        assert os.path.exists(file_path),f"{file_path.split('/')[-1]} not found in downloaded directory"
+        assert os.path.exists(file_path),f"{file_path.split(f'{self.pp}')[-1]} not found in downloaded directory"
         with open(file_path, 'r') as f:
             file_content = f.read()
         return file_content
@@ -71,15 +86,15 @@ class installing_process():
         '''
         Return given file content as a string.
         '''
-        source = f'{INSTALLATION_DIR}/{file}'
-        destination = f'{self.app_path}/{file}'
+        source = f'{self.INSTALLATION_DIR}{self.pp}{file}'
+        destination = f'{self.app_path}{self.pp}{file}'
         file_content = self.get_files(source)
         with open(destination, 'w') as f:
             f.write(file_content)
         self.make_executable(file)
     
     def create_file(self, file):
-        with open(f'{self.app_path}/{file}', 'w') as f:
+        with open(f'{self.app_path}{self.pp}{file}', 'w') as f:
             pass
         self.make_executable(file)
     
@@ -90,9 +105,35 @@ class installing_process():
             print("To Cover")
         else:
             print("Not know how to do")
+
+    def remove_prev_shebang(self, content):
+        lines = content.split('\n')
+        while len(lines)>0 and lines[0].strip()[:2] == "#!":
+            lines.pop(0)
+        return '\n'.join(lines)
+
+    def add_at_beginning(self, file, content):
+        '''Add shebang line in the installation dir files'''
+        with open(f'{self.INSTALLATION_DIR}{self.pp}{file}','r') as f:
+            previous_content = f.read()
+        updated_content = content+'\n'+self.remove_prev_shebang(previous_content)
+        with open(f'{self.INSTALLATION_DIR}{self.pp}{file}','w') as f:
+            f.write(updated_content)
+
+    def add_shebang(self):
+        if PLATFORM == 'Linux':
+            shebang_line = "#!/usr/bin/python3"
+        elif PLATFORM == "Windows":
+            shebang_line = "#!python"
+        else:
+            shebang_line = "#!/usr/bin/env python3"
+        self.add_at_beginning("acc", shebang_line)
+        self.add_at_beginning("main.py", shebang_line)
+        self.add_at_beginning("install", shebang_line)
     
     def do_installation(self):
         print(f"System : {PLATFORM} {platform.release()}")
+        self.add_shebang()
         self.create_app_dir()
         self.put_files('main.py')
         self.put_files('operations.py')
@@ -101,7 +142,7 @@ class installing_process():
         self.put_files('acc')
         if PLATFORM == 'Linux':
             self.create_symlink()
-            
+        print("Installation done successfully!")            
 
 if __name__ == '__main__':
     installation = installing_process()

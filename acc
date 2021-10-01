@@ -1,7 +1,4 @@
-#!/usr/bin/python3
-#!python3
-#!/usr/bin/env
-
+#!python
 import sys
 import os
 import platform
@@ -13,8 +10,12 @@ USER_NAME = getpass.getuser()
 ARGS = ' '.join(sys.argv[1:])
 
 if PLATFORM == 'Windows':
-    pass
+    APP_PATH = f"C:\\Users\\{USER_NAME}\\.acc"
+    os.system(f"python {APP_PATH}\\main.py {ARGS}")
 
 elif PLATFORM == "Linux":
     APP_PATH = f'/home/{USER_NAME}/.acc'
     os.system(f'{APP_PATH}/./main.py {ARGS}')
+
+else:
+    print("Platform isnt compatible with your system yet")

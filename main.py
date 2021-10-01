@@ -1,7 +1,4 @@
-#!/usr/bin/python3
-#!python3
-#!/usr/bin/env
-
+#!python
 import argparse
 import os
 import platform
@@ -78,7 +75,7 @@ if is_settings_related:
     if SHOW_TEMPLATE:
         print('\nTemplate\n------------------------------------------------------------------------------------\n'
             + template_opr.get_template()
-            + '\n----------------------------------------------------------------')
+            + '\n------------------------------------------------------------------------------------')
     if CHANGE_TEMPLATE:
         template_opr.set_template()
     if DO_UNINSTALL:
