@@ -30,17 +30,20 @@ class installing_process():
     def get_installation_dir(self):
         self.get_path_progressor()
         curr_dir = os.getcwd()
-        argument = sys.argv[0].strip().split(f'{self.pp}')[:-1]
-        if len(argument) > 0 and argument[-1] == '.':
-            # If users try to crete the file in installation dir
+        argument = f'{self.pp}'.join(sys.argv[0].strip().split(f'{self.pp}')[:-1])
+        argument = argument.rstrip(f'{self.pp}.')
+        if not argument:
+            # Ex: ./main.py
             self.INSTALLATION_DIR = curr_dir
-        elif self.all_files_exists(f'{self.pp}'.join(argument)):
-            # When user calls it from root. Then we can simply put the argument as app dir
-            self.INSTALLATION_DIR = f'{self.pp}'.join(argument)
+        elif argument and argument[0]=='.':
+            # Ex: ./auto-cpp-compiler/./main.py
+            self.INSTALLATION_DIR = curr_dir + self.pp + argument.lstrip()
         else:
-            # When user calls from a different dir and refernce it from there
-            self.INSTALLATION_DIR = curr_dir+f'{self.pp}'+f'{self.pp}'.join(argument)
-    
+            # Ex: /home/user/..../auto-cpp-compiler/main.py | C:\\Users\\...\\auto-cpp-compiler\\main.py
+            self.INSTALLATION_DIR = argument
+        
+        assert self.all_files_exists(self.APP_PATH),"Required files arent present in the downloaded directory.\nPlease redownload the files!"
+
     def all_files_exists(self, path):
         required_files = ['main.py', 'operations.py', 'template.cpp','acc','.editor']
         for file in required_files:
@@ -58,11 +61,10 @@ class installing_process():
             exit(0)
         elif PLATFORM == 'Windows':
             self.app_path = f'{WINDOWS_APP_PATH}{self.pp}{APP_DIR_NAME}'
-            print('app_path', self.app_path)
         else:
             print(f'This software doesnt support this system yet :(\nPlease let us know your system to extend our application compatibility with it.\n\nYou can tell this issue at:\n{ISSUES_LINK}')
             exit(0)
-        print(self.app_path)
+        print('app_path: ',self.app_path)
 
     def create_app_dir(self):
         '''
@@ -86,7 +88,7 @@ class installing_process():
     
     def create_windows_symlink(self):
         pass
-    
+
     def get_files(self, file_path):
         '''
         Return given file content as a string.
@@ -106,11 +108,6 @@ class installing_process():
         file_content = self.get_files(source)
         with open(destination, 'w') as f:
             f.write(file_content)
-        self.make_executable(file)
-    
-    def create_file(self, file):
-        with open(f'{self.app_path}{self.pp}{file}', 'w') as f:
-            pass
         self.make_executable(file)
     
     def make_executable(self, file):
@@ -153,7 +150,6 @@ class installing_process():
         self.put_files('main.py')
         self.put_files('operations.py')
         self.put_files('template.cpp')
-        self.create_file('.editor')
         self.put_files('acc')
         if PLATFORM == 'Linux':
             self.create_linux_symlink()

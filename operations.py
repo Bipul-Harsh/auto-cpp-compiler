@@ -13,16 +13,19 @@ class system_settings:
     def __init__(self, installation_dir=''):
         self.get_path_progressor()
         curr_dir = os.getcwd()
-        argument = sys.argv[0].strip().split(f'{self.pp}')[:-1]
-        if len(argument) > 0 and argument[-1] == '.':
-            # If users try to crete the file in installation dir
+        argument = f'{self.pp}'.join(sys.argv[0].strip().split(f'{self.pp}')[:-1])
+        argument = argument.rstrip(f'{self.pp}.')
+        if not argument:
+            # Ex: ./main.py
             self.APP_PATH = curr_dir
-        elif self.all_files_exists(f'{self.pp}'.join(argument)):
-            # When user calls it from root. Then we can simply put the argument as app dir
-            self.APP_PATH = f'{self.pp}'.join(argument)
+        elif argument and argument[0]=='.':
+            # Ex: ./auto-cpp-compiler/./main.py
+            self.APP_PATH = curr_dir + self.pp + argument.lstrip()
         else:
-            # When user calls from a different dir and refernce it from there
-            self.APP_PATH = curr_dir+f'{self.pp}'+f'{self.pp}'.join(argument)
+            # Ex: /home/user/..../auto-cpp-compiler/main.py | C:\\Users\\...\\auto-cpp-compiler\\main.py
+            self.APP_PATH = argument
+        
+        assert self.all_files_exists(self.APP_PATH),"Required files arent present in the directory.\nPlease reinstall the application!"
     
     def all_files_exists(self, path):
         required_files = ['main.py', 'operations.py', 'template.cpp','acc','.editor']
@@ -58,6 +61,7 @@ class editor(system_settings):
     def __init__(self, installation_dir=''):
         system_settings.__init__(self, installation_dir)
         self.editor_setting_file = self.APP_PATH+f'{self.pp}.editor'
+        self.file_check()
         try:
             self.get_editor()
         except ValueError:
@@ -75,6 +79,11 @@ class editor(system_settings):
             if not got_any:
                 print(f"You system doesnt have any of these text editors:\n"+'\n'.join(editors)+'\nPlease install any of them to get started.')
                 exit(0)
+
+    def file_check(self):
+        if not os.path.exists(self.editor_setting_file):
+            with open(self.editor_setting_file, 'w') as f:
+                pass
 
     def find_editor(self, editor):
         '''
