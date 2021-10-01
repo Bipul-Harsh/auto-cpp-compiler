@@ -42,7 +42,7 @@ class installing_process():
             self.INSTALLATION_DIR = curr_dir+f'{self.pp}'+f'{self.pp}'.join(argument)
     
     def all_files_exists(self, path):
-        required_files = ['install', 'main.py', 'oprations.py', 'template.cpp','acc','.editor']
+        required_files = ['main.py', 'operations.py', 'template.cpp','acc','.editor']
         for file in required_files:
             if not os.path.exists(f'{path}{self.pp}{file}'):
                 return False
@@ -74,7 +74,7 @@ class installing_process():
         print(self.app_path)
         print(os.path.isdir(self.app_path))
     
-    def create_symlink(self):
+    def create_linux_symlink(self):
         '''For linux only'''
         symlink_path = "/usr/local/bin/acc"
         file_path = self.app_path+'/acc'
@@ -83,6 +83,9 @@ class installing_process():
             print('syslink exists')
             os.system(f'sudo rm {symlink_path}')
         os.system(f'sudo ln -s {file_path} {symlink_path}')
+    
+    def create_windows_symlink(self):
+        pass
     
     def get_files(self, file_path):
         '''
@@ -153,8 +156,10 @@ class installing_process():
         self.create_file('.editor')
         self.put_files('acc')
         if PLATFORM == 'Linux':
-            self.create_symlink()
-        print("Installation done successfully!")            
+            self.create_linux_symlink()
+        elif PLATFORM == "Windows":
+            self.create_windows_symlink()
+        print("Installation done successfully!")
 
 if __name__ == '__main__':
     installation = installing_process()

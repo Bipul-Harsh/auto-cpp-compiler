@@ -18,4 +18,4 @@ elif PLATFORM == "Linux":
     os.system(f'{APP_PATH}/./main.py {ARGS}')
 
 else:
-    print("Platform isnt compatible with your system yet")
+    print("Application isnt compatible with your system yet")

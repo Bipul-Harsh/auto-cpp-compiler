@@ -25,7 +25,7 @@ class system_settings:
             self.APP_PATH = curr_dir+f'{self.pp}'+f'{self.pp}'.join(argument)
     
     def all_files_exists(self, path):
-        required_files = ['install', 'main.py', 'oprations.py', 'template.cpp','acc','.editor']
+        required_files = ['main.py', 'operations.py', 'template.cpp','acc','.editor']
         for file in required_files:
             if not os.path.exists(f'{path}{self.pp}{file}'):
                 return False
@@ -48,6 +48,7 @@ class system_settings:
             symlink_path = "/usr/local/bin/acc"
             if os.path.exists(symlink_path):
                 os.system(f"sudo rm {symlink_path}")
+        
         print(f"\nProgram uninstalled successfully.\n\nPlease let me know for any issues you have faced at:\n{ISSUES_LINK}")
 
 class editor(system_settings):
