@@ -40,7 +40,6 @@ parser.add_argument('--ce', type=str, help="Change text editor of your choice (v
 parser.add_argument('--se', action='store_const', const=True, default=False, dest='show_editor', help="Show selected text editor.")
 parser.add_argument('--version', action='store_const', const=True, default=False, dest='version', help="Show current version.")
 parser.add_argument('-co', type=str, default="a.out", help="Change output file name on compiling file.")
-parser.add_argument('--reinstall', action='store_const', const=True, default=False, dest='reinstall', help="To reinstall the program. Be catious as all custom settings will be lost.")
 parser.add_argument('--uninstall', action='store_const', const=True, default=False, dest='uninstall', help="To uninstall %(prog)s program :(")
 
 args = parser.parse_args()
@@ -54,7 +53,6 @@ SHOW_VERSION = args.version
 SHOW_EDITOR = args.show_editor
 SHOW_TEMPLATE = args.show_template
 OUTPUT_FILE = args.co
-DO_REINSTALL = args.reinstall
 DO_UNINSTALL = args.uninstall
 
 # Check if the user didnt put anything
