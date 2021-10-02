@@ -154,6 +154,7 @@ class installing_process():
         self.put_files('operations.py')
         self.put_files('template.cpp')
         self.put_files('acc')
+        self.put_files('.required')
         if PLATFORM == 'Linux':
             self.create_linux_symlink()
         elif PLATFORM == "Windows":
