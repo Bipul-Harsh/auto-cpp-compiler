@@ -130,7 +130,6 @@ class installing_process():
         if PLATFORM == "Linux":
             symlink_path = "/usr/local/bin/acc"
             file_path = self.app_path+'/acc'
-            print(symlink_path, file_path)
             if os.path.exists(symlink_path):
                 os.system(f'sudo rm {symlink_path}')
             os.system(f'sudo ln -s {file_path} {symlink_path}')
