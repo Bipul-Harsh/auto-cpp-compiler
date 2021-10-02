@@ -26,6 +26,20 @@ class installing_process():
             self.pp = '\\'
         else:
             self.pp = '/'
+    
+    def get_app_path(self):
+        if PLATFORM == 'Linux':
+            self.app_path = f'{LINUX_APP_PATH}{self.pp}{APP_DIR_NAME}'
+        elif PLATFORM == 'Mac':
+            # self.app_path = f'{MAC_APP_PATH}{self.pp}{APP_DIR_NAME}'
+            print(f"Currently this application cannot be installed in your system.\nBut dont worry it will be supported soon on your request on:\n{ISSUES_LINK}")
+            exit(0)
+        elif PLATFORM == 'Windows':
+            self.app_path = f'{WINDOWS_APP_PATH}{self.pp}{APP_DIR_NAME}'
+        else:
+            print(f'This software doesnt support this system yet :(\nPlease let us know your system to extend our application compatibility with it.\n\nYou can tell this issue at:\n{ISSUES_LINK}')
+            exit(0)
+        print('app_path: ',self.app_path)
 
     def get_installation_dir(self):
         self.get_path_progressor()
@@ -42,29 +56,18 @@ class installing_process():
             # Ex: /home/user/..../auto-cpp-compiler/main.py | C:\\Users\\...\\auto-cpp-compiler\\main.py
             self.INSTALLATION_DIR = argument
         
-        assert self.all_files_exists(self.APP_PATH),"Required files arent present in the downloaded directory.\nPlease redownload the files!"
+        assert self.all_files_exists(self.INSTALLATION_DIR),"Required files arent present in the downloaded directory.\nPlease re-download the files!"
 
     def all_files_exists(self, path):
-        required_files = ['main.py', 'operations.py', 'template.cpp','acc','.editor']
-        for file in required_files:
+        required_file_path = path + self.pp+'.required'
+        assert os.path.exists(required_file_path),".required file is not present in the directory."
+        with open(required_file_path, 'r') as f:
+            files = f.read().split('\n')
+        for file in files:
             if not os.path.exists(f'{path}{self.pp}{file}'):
                 return False
         else:
             return True
-
-    def get_app_path(self):
-        if PLATFORM == 'Linux':
-            self.app_path = f'{LINUX_APP_PATH}{self.pp}{APP_DIR_NAME}'
-        elif PLATFORM == 'Mac':
-            # self.app_path = f'{MAC_APP_PATH}{self.pp}{APP_DIR_NAME}'
-            print(f"Currently this application cannot be installed in your system.\nBut dont worry it will be supported soon on your request on:\n{ISSUES_LINK}")
-            exit(0)
-        elif PLATFORM == 'Windows':
-            self.app_path = f'{WINDOWS_APP_PATH}{self.pp}{APP_DIR_NAME}'
-        else:
-            print(f'This software doesnt support this system yet :(\nPlease let us know your system to extend our application compatibility with it.\n\nYou can tell this issue at:\n{ISSUES_LINK}')
-            exit(0)
-        print('app_path: ',self.app_path)
 
     def create_app_dir(self):
         '''

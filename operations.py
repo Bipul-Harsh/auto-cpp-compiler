@@ -28,8 +28,11 @@ class system_settings:
         assert self.all_files_exists(self.APP_PATH),"Required files arent present in the directory.\nPlease reinstall the application!"
     
     def all_files_exists(self, path):
-        required_files = ['main.py', 'operations.py', 'template.cpp','acc','.editor']
-        for file in required_files:
+        required_file_path = path + self.pp+'.required'
+        assert os.path.exists(required_file_path),".required file is not present in the directory."
+        with open(required_file_path, 'r') as f:
+            files = f.read().split('\n')
+        for file in files:
             if not os.path.exists(f'{path}{self.pp}{file}'):
                 return False
         else:
