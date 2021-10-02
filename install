@@ -38,7 +38,6 @@ class installing_process():
         else:
             print(f'This software doesnt support this system yet :(\nPlease let us know your system to extend our application compatibility with it.\n\nYou can tell this issue at:\n{ISSUES_LINK}')
             exit(0)
-        print('app_path: ',self.app_path)
 
     def get_installation_dir(self):
         self.get_path_progressor()
@@ -75,8 +74,6 @@ class installing_process():
         if os.path.isdir(self.app_path):
             shutil.rmtree(self.app_path)
         os.mkdir(self.app_path)
-        print(self.app_path)
-        print(os.path.isdir(self.app_path))
 
     def get_files(self, file_path):
         '''
@@ -105,12 +102,14 @@ class installing_process():
             self.put_file(file)
     
     def make_executable(self, file):
-        if PLATFORM == 'Linux':
+        if PLATFORM == 'Linux' or PLATFORM == "Mac":
             os.system(f'sudo chmod 777 {self.app_path}/{file}')
         elif PLATFORM == "Windows":
-            print("To Cover")
+            # Well I dont think its need for windows
+            pass
         else:
-            print("Not know how to do")
+            print("Platform not supported!")
+            
 
     def remove_prev_shebang(self, content):
         lines = content.split('\n')
@@ -133,11 +132,10 @@ class installing_process():
             file_path = self.app_path+'/acc'
             print(symlink_path, file_path)
             if os.path.exists(symlink_path):
-                print('syslink exists')
                 os.system(f'sudo rm {symlink_path}')
             os.system(f'sudo ln -s {file_path} {symlink_path}')
         elif PLATFORM == "Windows":
-            print("Symlink is not working yet")
+            print("Symlink not supported for this platform yet!")
 
     def add_shebang(self):
         if PLATFORM == 'Linux':

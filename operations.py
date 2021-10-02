@@ -117,7 +117,6 @@ class editor(system_settings):
             editor.find_editor() : to check if editor exists  
         '''
         path = self.find_editor(editor_name)
-        print("path: ", path)
         try:
             with open(self.editor_setting_file, 'w') as f:
                 f.write(f'{editor_name}|{path}')
