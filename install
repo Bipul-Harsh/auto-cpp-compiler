@@ -1,4 +1,3 @@
-#!python
 import platform
 import os
 import getpass
@@ -62,8 +61,8 @@ class installing_process():
         required_file_path = path + self.pp+'.required'
         assert os.path.exists(required_file_path),".required file is not present in the directory."
         with open(required_file_path, 'r') as f:
-            files = f.read().split('\n')
-        for file in files:
+            self.files = f.read().split('\n')
+        for file in self.files:
             if not os.path.exists(f'{path}{self.pp}{file}'):
                 return False
         else:
@@ -89,7 +88,7 @@ class installing_process():
             file_content = f.read()
         return file_content
 
-    def put_files(self, file):
+    def put_file(self, file):
         '''
         Return given file content as a string.
         '''
@@ -99,6 +98,11 @@ class installing_process():
         with open(destination, 'w') as f:
             f.write(file_content)
         self.make_executable(file)
+    
+    def put_files(self):
+        self.put_file('.required')
+        for file in self.files:
+            self.put_file(file)
     
     def make_executable(self, file):
         if PLATFORM == 'Linux':
@@ -122,18 +126,18 @@ class installing_process():
         with open(f'{self.INSTALLATION_DIR}{self.pp}{file}','w') as f:
             f.write(updated_content)
     
-    def create_linux_symlink(self):
-        '''For linux only'''
-        symlink_path = "/usr/local/bin/acc"
-        file_path = self.app_path+'/acc'
-        print(symlink_path, file_path)
-        if os.path.exists(symlink_path):
-            print('syslink exists')
-            os.system(f'sudo rm {symlink_path}')
-        os.system(f'sudo ln -s {file_path} {symlink_path}')
-    
-    def create_windows_symlink(self):
-        pass
+    def create_symlink(self):
+        '''For Creating Symlinks'''
+        if PLATFORM == "Linux":
+            symlink_path = "/usr/local/bin/acc"
+            file_path = self.app_path+'/acc'
+            print(symlink_path, file_path)
+            if os.path.exists(symlink_path):
+                print('syslink exists')
+                os.system(f'sudo rm {symlink_path}')
+            os.system(f'sudo ln -s {file_path} {symlink_path}')
+        elif PLATFORM == "Windows":
+            print("Symlink is not working yet")
 
     def add_shebang(self):
         if PLATFORM == 'Linux':
@@ -150,16 +154,8 @@ class installing_process():
         print(f"System : {PLATFORM} {platform.release()}")
         self.add_shebang()
         self.create_app_dir()
-        self.put_files('main.py')
-        self.put_files('operations.py')
-        self.put_files('template.cpp')
-        self.put_files('acc')
-        self.put_files('.required')
-        self.put_files('.editor')
-        if PLATFORM == 'Linux':
-            self.create_linux_symlink()
-        elif PLATFORM == "Windows":
-            self.create_windows_symlink()
+        self.put_files()
+        self.create_symlink()
         print("Installation done successfully!")
 
 if __name__ == '__main__':
