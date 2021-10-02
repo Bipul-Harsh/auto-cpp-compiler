@@ -1,10 +1,9 @@
 import os
 import shutil
-import getpass
 import sys
 import platform
 
-SYS_USER = getpass.getuser()
+SYS_USER = os.getlogin()
 COMPILER = 'g++'
 ISSUES_LINK = 'https://github.com/Bipul-Harsh/auto-cpp-compiler/issues'
 PLATFORM = platform.system()

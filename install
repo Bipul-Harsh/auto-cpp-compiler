@@ -1,10 +1,9 @@
 import platform
 import os
-import getpass
 import sys
 import shutil
 
-USER_NAME = getpass.getuser()
+USER_NAME = os.getlogin()
 LINUX_APP_PATH = f"/home/{USER_NAME}"
 WINDOWS_APP_PATH = f"C:\\Users\\{USER_NAME}"
 APP_DIR_NAME = '.acc'
