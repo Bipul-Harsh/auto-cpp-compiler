@@ -15,7 +15,7 @@ Currenlty Needs:
 ## Section
 - [Installation](https://github.com/Bipul-Harsh/auto-cpp-compiler#installation)
 - [Help-Window](https://github.com/Bipul-Harsh/auto-cpp-compiler#help-window)
-- [Open File](https://github.com/Bipul-Harsh/auto-cpp-compiler#open)
+- [Open File](https://github.com/Bipul-Harsh/auto-cpp-compiler#open-file)
 - [Show Settings](https://github.com/Bipul-Harsh/auto-cpp-compiler#show-settings)
 - [Change Settings](https://github.com/Bipul-Harsh/auto-cpp-compiler#change-settings)
 
