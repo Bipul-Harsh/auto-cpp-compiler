@@ -27,7 +27,7 @@ Currently the `acc` command only works in linux, and for windows you have to cal
 
 - [Linux](#linux)
 - [Windows](#Windows)
-- [Mac](#Mac OS)
+- [Mac](#Mac-OS)
 
 ## Linux
 - Go to downloaded directory in terminal
