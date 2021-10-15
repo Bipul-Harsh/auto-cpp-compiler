@@ -25,9 +25,9 @@ It has been tested on Ubuntu and Winodws only but is expected to work on other l
 
 Currently the `acc` command only works in linux, and for windows you have to call it from the download directory or the app directory given in below instructions.  
 
-- [Linux](https://github.com/Bipul-Harsh/auto-cpp-compiler#linux)
-- [Windows]()
-- [Mac]()
+- [Linux](#linux)
+- [Windows](#Windows)
+- [Mac](#Mac OS)
 
 ## Linux
 - Go to downloaded directory in terminal
