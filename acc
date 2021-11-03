@@ -8,11 +8,18 @@ USER_NAME = getpass.getuser()
 
 ARGS = ' '.join(sys.argv[1:])
 if('--' not in ARGS):
-    if('-o' in ARGS):
-        arg_ind = ARGS.index('-o')
-        ARGS = ARGS[:arg_ind+3]+'\"'+ARGS[arg_ind+3:]+'\"'
+    if('-o ' in ARGS):
+        arg_ind = ARGS.find('-o ')
+        ARGS = ARGS[:arg_ind+3]+'\"'+ARGS[arg_ind+3:]
     else:
-        ARGS = '\"'+ARGS+'\"'
+        ARGS = '\"'+ARGS
+    if(' -co ' in ARGS):
+        arg_ind = ARGS.find(' -co ')
+        ARGS = ARGS[:arg_ind]+"\""+ARGS[arg_ind:arg_ind+5]+"\""+ARGS[arg_ind+5:]
+    if(' CO ' in ARGS):
+        arg_ind = ARGS.find(' CO ')
+        ARGS = ARGS[:arg_ind]+"\""+ARGS[arg_ind:arg_ind+4]+"\""+ARGS[arg_ind+4:]
+    ARGS += "\""
 
 if PLATFORM == 'Windows':
     APP_PATH = f"C:\\Users\\{USER_NAME}\\.acc"

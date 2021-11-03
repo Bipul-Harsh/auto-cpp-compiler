@@ -55,7 +55,7 @@ CHANGE_TEMPLATE = args.update_template
 SHOW_VERSION = args.version
 SHOW_EDITOR = args.show_editor
 SHOW_TEMPLATE = args.show_template
-OUTPUT_FILE = args.co
+OUTPUT_FILE = '\"'+args.co+'\"'
 DO_UNINSTALL = args.uninstall
 
 # Check if the user didnt put anything
