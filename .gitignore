@@ -1,0 +1,5 @@
+test*
+feature*
+*.out
+check*
+__pycache__

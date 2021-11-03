@@ -34,8 +34,9 @@ Example:
     > acc --ce vim
         
 For any issue visit:\nhttps://github.com/Bipul-Harsh/auto-cpp-compiler/issues''')
-parser.add_argument('-o', action='store_const', const=True, default=False, dest='override_file', help="Override if file exists with template file.")
+
 parser.add_argument('file', type=str, default='', help="to create/open file.",nargs='?')
+parser.add_argument('-o', action='store_const', const=True, default=False, dest='override_file', help="Override if file exists with template file.")
 parser.add_argument('--ct', action='store_const', const=True, default=False, dest='update_template', help="Change file template.")
 parser.add_argument('--st', action='store_const', const=True, default=False, dest='show_template', help="Show file template.")
 parser.add_argument('--ce', type=str, help="Change text editor of your choice (vim and gedit is preffered).")
@@ -46,7 +47,7 @@ parser.add_argument('--uninstall', action='store_const', const=True, default=Fal
 
 args = parser.parse_args()
 
-FILE = args.file.replace(' ', '_')
+FILE = args.file
 OVERRIDE_FILE = args.override_file
 CHANGE_EDITOR = bool(args.ce) #Empty string makes false
 EDITOR = args.ce

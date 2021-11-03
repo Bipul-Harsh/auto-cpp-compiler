@@ -174,11 +174,11 @@ class file(template):
         '''
         Create file in the present directory.
         '''
-        self.file_path = self.pwd+f'{self.pp}'+file
+        self.file_path = self.pwd+f'{self.pp}'+file.replace(' ','\ ')
         self.override = override
         assert self.check_file(),'File Extension Problem'
         if not os.path.exists(self.file_path) or override:
-            with open(self.file_path, 'w') as f:
+            with open(file, 'w') as f:
                 f.write(self.get_template())
     
     def compile_file(self, output_file):
