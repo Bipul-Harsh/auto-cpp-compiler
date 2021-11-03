@@ -23,7 +23,7 @@ Currenlty Needs:
 
 It has been tested on Ubuntu and Winodws only but is expected to work on other linux based system and mac OS.
 
-Currently the `acc` command only works in linux, and for windows you have to call it from the download directory or the app directory given in below instructions.  
+Currently the `acc` command only works in Linux and Windows. 
 
 - [Linux](#linux)
 - [Windows](#Windows)
@@ -46,7 +46,34 @@ acc --version
 ```
 python .\install
 ```
-- The above installation is beneficial if you are using git bash
+- The above installation command will install the program.
+- After running the above command the next step you have to do is create enviornment variable.
+### Creating Enviornment Variable
+- **Step1**: Open start menu and write following command
+```
+environment variables
+```
+- **Step2**: Click the following option
+![Start Menu](./assets/start_menu_search.png)
+- **Step3**: Click **Environment Variables...** button
+![System Property Window](./assets/system_properties_window.png)
+- **Step4**: Double click the **Path** field in user section
+![Environment Variable Window](./assets/env_var_window.png)
+- **Step5**: Click **New** button
+- **Step6**: Put following path
+```
+C:\Users\bipul\.acc
+```
+- **Step7**: Click **OK** button in Edit window
+![Add Environment Path](./assets/add_env_path.png)
+- **Step8**: Click **OK** button in Main Window
+![Final Save](./assets/final_save.png)
+### Verify installation
+- Open new cmd/powershell/terminal/git bash window and type following command
+```
+acc --version
+```
+![Verify Installation](./assets/verify_installation.png)
 
 ## Mac OS
 - Run following command after going to downloaded directory in terminal

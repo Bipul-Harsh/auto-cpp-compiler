@@ -133,7 +133,8 @@ class installing_process():
                 os.system(f'sudo rm {symlink_path}')
             os.system(f'sudo ln -s {file_path} {symlink_path}')
         elif PLATFORM == "Windows":
-            print("Symlink not supported for this platform yet!")
+            # Will put acc.exe file .acc
+            shutil.copyfile(self.INSTALLATION_DIR+self.pp+'acc.exe', self.app_path+self.pp+'acc.exe')
 
     def add_shebang(self):
         if PLATFORM == 'Linux':
