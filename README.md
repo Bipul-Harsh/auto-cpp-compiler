@@ -62,7 +62,7 @@ environment variables
 - **Step5**: Click **New** button
 - **Step6**: Put following path
 ```
-C:\Users\bipul\.acc
+C:\Users\<your username>\.acc
 ```
 - **Step7**: Click **OK** button in Edit window
 ![Add Environment Path](./assets/add_env_path.png)
