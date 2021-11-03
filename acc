@@ -6,7 +6,7 @@ import getpass
 PLATFORM = platform.system()
 USER_NAME = getpass.getuser()
 
-ARGS = ' '.join(sys.argv[1:])
+ARGS = '\"'+' '.join(sys.argv[1:])+'\"'
 
 if PLATFORM == 'Windows':
     APP_PATH = f"C:\\Users\\{USER_NAME}\\.acc"
