@@ -80,7 +80,7 @@ acc --version
 ```
 python3 ./install
 ```
-- Running this will help you later of avoiding python3 everytime on calling the main.py file
+- Running this will help you later to avoid `python3` everytime on calling the main.py file
 - It is currently not tested on this OS.
 
 ## Help Window
