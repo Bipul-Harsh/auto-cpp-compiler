@@ -177,8 +177,8 @@ class file(template):
         self.file_path = '\"'+self.pwd+f'{self.pp}'+file+'\"'
         self.override = override
         assert self.check_file(),'File Extension Problem'
-        if not os.path.exists(self.file_path) or override:
-            with open(file, 'w') as f:
+        if not os.path.exists(self.file_path.strip('\"')) or override:
+            with open(self.file_path.strip('\"'), 'w') as f:
                 f.write(self.get_template())
     
     def compile_file(self, output_file):
@@ -201,4 +201,5 @@ class file(template):
         '''
         file_path = self.file_path.split(f'{self.pp}')
         execute_command = f'{self.pp}'.join(file_path[:-1])+f'{self.pp}.{self.pp}'+self.output_file
+        execute_command = execute_command[1:]
         os.system(f'{execute_command}')
