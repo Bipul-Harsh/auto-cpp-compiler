@@ -30,5 +30,5 @@ If applicable, add screenshots to help explain your problem.
 
 **Put `x` in Between [ ] Below if agree**
 <!-- [x] : Example how to put x --> 
-[ ] : Have you installed the software properly as per instruction
-[ ] : Are you getting this issue repeatedly?
+- [ ] : Have you installed the software properly as per instruction
+- [ ] : Are you getting this issue repeatedly?
