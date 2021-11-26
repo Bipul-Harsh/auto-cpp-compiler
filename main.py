@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 import argparse
 import os
 import platform
@@ -60,8 +59,6 @@ SHOW_TEMPLATE = args.show_template
 OUTPUT_FILE = args.eo
 DO_UNINSTALL = args.uninstall
 
-print(OUTPUT_FILE)
-
 # Check if the user didnt put anything
 is_settings_related = bool(CHANGE_EDITOR or DO_UNINSTALL or CHANGE_TEMPLATE or SHOW_VERSION or SHOW_TEMPLATE or SHOW_EDITOR)
 assert bool(FILE or is_settings_related),"Please provide a file name"
@@ -98,12 +95,11 @@ file_opr.create_file(FILE, OVERRIDE_FILE)
 in_loop = True
 opr = 'd'
 while in_loop:
-    # if platform.system() == 'Windows':
-    #     os.system('cls')
-    # else:
-    #     os.system('clear')
+    if platform.system() == 'Windows':
+        os.system('cls')
+    else:
+        os.system('clear')
     if opr=='o' or opr=='d':
-        print('opr: ', opr)
         file_opr.open_file()
         file_opr.compile_file(OUTPUT_FILE)
     print('Ouput\n------------------------------------------------------------------------------------')

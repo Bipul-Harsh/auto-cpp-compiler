@@ -216,6 +216,5 @@ class file(template):
         '''
         Removes the output file.
         '''
-        print('Output file exists: ',os.path.exists(self.execute_command))
         if not self.explicit_output and os.path.exists(self.execute_command):
             os.remove(self.output_file.strip('\"'))
