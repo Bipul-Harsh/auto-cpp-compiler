@@ -12,7 +12,7 @@ try:
 except FileNotFoundError:
     print("File is not found. Please install the program first.")
 
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 
 LOGO = '''\
     _         _           ____ ____  ____     ____                      _ _           
