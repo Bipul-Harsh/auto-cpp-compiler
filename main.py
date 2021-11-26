@@ -113,7 +113,8 @@ while in_loop:
     while opr not in ['e','o','r']:
         opr = input('Enter [o open] [e exit] [r rerun]: ').lower()
         # Deleting the output file
-        file_opr.delete_output()
+        if opr!='r':
+            file_opr.delete_output()
         if opr == 'e':
             exit(0)
         elif opr not in ['o','r']:
