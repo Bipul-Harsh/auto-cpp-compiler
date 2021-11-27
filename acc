@@ -13,11 +13,11 @@ if('--' not in ARGS):
         ARGS = ARGS[:arg_ind+3]+'\"'+ARGS[arg_ind+3:]
     else:
         ARGS = '\"'+ARGS
-    if(' -co ' in ARGS):
-        arg_ind = ARGS.find(' -co ')
+    if(' -eo ' in ARGS):
+        arg_ind = ARGS.find(' -eo ')
         ARGS = ARGS[:arg_ind]+"\""+ARGS[arg_ind:arg_ind+5]+"\""+ARGS[arg_ind+5:]
-    if(' CO ' in ARGS):
-        arg_ind = ARGS.find(' CO ')
+    if(' EO ' in ARGS):
+        arg_ind = ARGS.find(' EO ')
         ARGS = ARGS[:arg_ind]+"\""+ARGS[arg_ind:arg_ind+4]+"\""+ARGS[arg_ind+4:]
     ARGS += "\""
 

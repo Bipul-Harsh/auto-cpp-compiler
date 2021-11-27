@@ -12,7 +12,7 @@ try:
 except FileNotFoundError:
     print("File is not found. Please install the program first.")
 
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 
 LOGO = '''\
     _         _           ____ ____  ____     ____                      _ _           
@@ -32,6 +32,7 @@ Example:
     > acc prog.cpp
     > acc --ct
     > acc --ce vim
+    > acc prog.cpp -eo output.out
         
 For any issue visit:\nhttps://github.com/Bipul-Harsh/auto-cpp-compiler/issues''')
 
@@ -42,7 +43,7 @@ parser.add_argument('--st', action='store_const', const=True, default=False, des
 parser.add_argument('--ce', type=str, help="Change text editor of your choice (vim and gedit is preffered).")
 parser.add_argument('--se', action='store_const', const=True, default=False, dest='show_editor', help="Show selected text editor.")
 parser.add_argument('--version', action='store_const', const=True, default=False, dest='version', help="Show current version.")
-parser.add_argument('-co', type=str, default="a.out", help="Change output file name on compiling file.")
+parser.add_argument('-eo', type=str, help="For storing the ouput file explicitly. Please output file name after it!")
 parser.add_argument('--uninstall', action='store_const', const=True, default=False, dest='uninstall', help="To uninstall %(prog)s program :(")
 
 args = parser.parse_args()
@@ -55,12 +56,13 @@ CHANGE_TEMPLATE = args.update_template
 SHOW_VERSION = args.version
 SHOW_EDITOR = args.show_editor
 SHOW_TEMPLATE = args.show_template
-OUTPUT_FILE = '\"'+args.co+'\"'
+OUTPUT_FILE = args.eo
 DO_UNINSTALL = args.uninstall
 
 # Check if the user didnt put anything
 is_settings_related = bool(CHANGE_EDITOR or DO_UNINSTALL or CHANGE_TEMPLATE or SHOW_VERSION or SHOW_TEMPLATE or SHOW_EDITOR)
 assert bool(FILE or is_settings_related),"Please provide a file name"
+assert ('-eo' not in FILE), "Please provide an output file name"
 
 # All Query Task
 if is_settings_related:
@@ -91,20 +93,25 @@ if is_settings_related:
 # File Operations
 file_opr.create_file(FILE, OVERRIDE_FILE)
 in_loop = True
+opr = 'd'
 while in_loop:
     if platform.system() == 'Windows':
         os.system('cls')
     else:
         os.system('clear')
-    file_opr.open_file()
-    file_opr.compile_file(OUTPUT_FILE)
+    if opr=='o' or opr=='d':
+        file_opr.open_file()
+        file_opr.compile_file(OUTPUT_FILE)
     print('Ouput\n------------------------------------------------------------------------------------')
     file_opr.execute_output()
     print('------------------------------------------------------------------------------------')
-    opr = ''
-    while opr not in ['e','o']:
-        opr = input('Enter [o open] [e exit] : ').lower()
+    opr=''
+    while opr not in ['e','o','r']:
+        opr = input('Enter [o open] [e exit] [r rerun]: ').lower()
+        # Deleting the output file
+        if opr!='r':
+            file_opr.delete_output()
         if opr == 'e':
             exit(0)
-        elif opr == 'o':
+        elif opr not in ['o','r']:
             print('Invalid Input')

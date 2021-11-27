@@ -83,6 +83,9 @@ class editor(system_settings):
                 exit(0)
 
     def file_check(self):
+        '''
+        Checks if editor file exists, if not creates it.
+        '''
         if not os.path.exists(self.editor_setting_file):
             with open(self.editor_setting_file, 'w') as f:
                 pass
@@ -185,9 +188,14 @@ class file(template):
         '''
         Checks compiler and compiles the cpp file and generate ouput file in present directory.
         '''
-        self.output_file = output_file
+        if output_file:
+            self.output_file = '\"'+output_file+'\"'
+            self.explicit_output = True
+        else:
+            self.output_file = "a.out"
+            self.explicit_output = False
         assert shutil.which(COMPILER),f'{COMPILER} is not installed in your system. Please install it and try again'
-        os.system(f'{COMPILER} {self.file_path} -o {output_file}')
+        os.system(f'{COMPILER} {self.file_path} -o {self.output_file}')
     
     def open_file(self):
         '''
@@ -200,6 +208,13 @@ class file(template):
         Executes the output .out file.
         '''
         file_path = self.file_path.split(f'{self.pp}')
-        execute_command = f'{self.pp}'.join(file_path[:-1])+f'{self.pp}.{self.pp}'+self.output_file
-        execute_command = execute_command[1:]
-        os.system(f'{execute_command}')
+        self.execute_command = f'{self.pp}'.join(file_path[:-1])+f'{self.pp}.{self.pp}'+self.output_file
+        self.execute_command = self.execute_command[1:]
+        os.system(f'{self.execute_command}')
+    
+    def delete_output(self):
+        '''
+        Removes the output file.
+        '''
+        if not self.explicit_output and os.path.exists(self.execute_command):
+            os.remove(self.output_file.strip('\"'))
