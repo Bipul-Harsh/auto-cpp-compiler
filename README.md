@@ -22,6 +22,7 @@ Glimpse of its use
 - [Open File](#open-file)
 - [Show Settings](#show-settings)
 - [Change Settings](#change-settings)
+- [License](#license)
 
 ## Installation
 
@@ -173,4 +174,4 @@ acc --ct
 Feel free to make any contributions to this project :)
 
 ## License
-[MIT LICENSE](./LICENSE)
+[MIT LICENSE](LICENSE)
