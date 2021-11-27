@@ -171,3 +171,6 @@ acc --ct
 
 ## Contributions
 Feel free to make any contributions to this project :)
+
+## License
+[MIT LICENSE](./LICENSE)
