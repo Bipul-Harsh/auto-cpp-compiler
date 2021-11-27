@@ -3,7 +3,7 @@
 # Auto CPP Compiler
 ## Version : 1.0.1
 
-Does repetitve compiling task of .cpp file for you :). Supporting cross platform installation and can work with different text editors :sparkles:.
+Does repetitve compiling task of .cpp file for you :smile:. Supporting cross platform installation and can work with different text editors :sparkles:.
 
 ![Prview](./assets/preview.gif)
 
