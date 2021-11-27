@@ -1,16 +1,20 @@
+<div align="center">
+
 # Auto CPP Compiler
-## Version : 1.0.0
+## Version : 1.0.1
 
-Does repetitve compiling task of .cpp file for you :)
+Does repetitve compiling task of .cpp file for you :). Supporting cross platform installation and can work with different text editors :sparkles:.
 
-### Glimpse of its use
+![Prview](./assets/preview.gif)
 
-Currenlty Needs:
+Glimpse of its use
+
+</div>
+
+### Currently Needs:
 - Python3
 - G++
 - Vim/Nano/Gedit or any other text editor
-
-![Prview](./assets/preview.gif)
 
 ## Section
 - [Installation](#installation)
@@ -54,26 +58,60 @@ python .\install
 environment variables
 ```
 - **Step2**: Click the following option
+
+<div align="center">
+
 ![Start Menu](./assets/start_menu_search.png)
-- **Step3**: Click **Environment Variables...** button
+
+</div>
+
+- **Step3**: Click **Environment Variables...**
+
+<div align="center">
+
 ![System Property Window](./assets/system_properties_window.png)
+
+</div>
+
 - **Step4**: Double click the **Path** field in user section
+
+<div align="center">
+
 ![Environment Variable Window](./assets/env_var_window.png)
+
+</div>
+
 - **Step5**: Click **New** button
 - **Step6**: Put following path
 ```
 C:\Users\<your username>\.acc
 ```
 - **Step7**: Click **OK** button in Edit window
+
+<div align="center">
+
 ![Add Environment Path](./assets/add_env_path.png)
+
+</div>
+
 - **Step8**: Click **OK** button in Main Window
+
+<div align="center">
+
 ![Final Save](./assets/final_save.png)
+
+</div>
+
 ### Verify installation
 - Open new cmd/powershell/terminal/git bash window and type following command
 ```
 acc --version
 ```
+<div align="center">
+
 ![Verify Installation](./assets/verify_installation.png)
+
+</div>
 
 ## Mac OS
 - Run following command after going to downloaded directory in terminal
@@ -95,9 +133,9 @@ Go to any directory you working and type
 acc file.cpp
 ```
 - This will open it in the provided editor, and creates a.out output file.
-- If you want to give custom output file run
+- If you want to save the output file explicitly, then run below command
 ```
-acc file.cpp -co custom.out
+acc file.cpp -eo custom.out
 ```
 
 ## Show Settings
