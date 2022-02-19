@@ -3,6 +3,7 @@ import os
 import platform
 
 import operations
+import sys
 # Initialising operation module
 try:
     file_opr = operations.file()
@@ -87,8 +88,8 @@ if is_settings_related:
             if confirm=='y':
                 system_settings.uninstall()
             elif confirm=='n':
-                exit(0)
-    exit(0)
+                sys.exit(0)
+    sys.exit(0)
 
 # File Operations
 file_opr.create_file(FILE, OVERRIDE_FILE)
@@ -112,6 +113,6 @@ while in_loop:
         if opr!='r':
             file_opr.delete_output()
         if opr == 'e':
-            exit(0)
+            sys.exit(0)
         elif opr not in ['o','r']:
             print('Invalid Input')

@@ -80,7 +80,7 @@ class editor(system_settings):
                     pass
             if not got_any:
                 print(f"You system doesnt have any of these text editors:\n"+'\n'.join(editors)+'\nPlease install any of them to get started.')
-                exit(0)
+                sys.exit(0)
 
     def file_check(self):
         '''
@@ -125,7 +125,7 @@ class editor(system_settings):
             print(f"Changed Editor Info\n{editor_name} : {path}")
         except:
             print("You might have not installed the application. Please install and try again")
-            exit(1)
+            sys.exit(1)
 
     def get_editor(self):
         '''
